@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/postagns")	//vai aceita coisas de postagem
+@RequestMapping("/postagens")	//vai aceita coisas de postagem
 @CrossOrigin("*")		//aceita coisa de outras origens como react e afins
 public class PostagemController {
+	
 	
 	@Autowired
 	private PostagemRepository repository;
