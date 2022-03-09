@@ -9,8 +9,11 @@ public class UsuarioLogin {
 	private String senha;
 	
 	private String token;
-
+//construtores
 	
+	
+	
+//getters e setters	
 	public String getNome() {
 		return nome;
 	}
