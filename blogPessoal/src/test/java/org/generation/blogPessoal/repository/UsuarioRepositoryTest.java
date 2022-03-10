@@ -41,14 +41,12 @@ public class UsuarioRepositoryTest {
 	
 	@Test
 	@DisplayName("Retorna 3 usuarios")
-	public void deveRetornarTresUsuarios() {
+	public void deveRetornarQuatroUsuarios() {
 		
 
-		List<Usuario> listaDeUsuarios = usuarioRepository.findAllbyNomeContainingIgnoreCase("Abreu");
-		assertEquals(3, listaDeUsuarios.size());
-		assertTrue(listaDeUsuarios.get(0).getNome().equals("Marcelo Abreu"));
-		assertTrue(listaDeUsuarios.get(1).getNome().equals("Henrique Abreu"));
-		assertTrue(listaDeUsuarios.get(2).getNome().equals("Pedro Abreu"));
+		List<Usuario> listaDeUsuarios = usuarioRepository.findAllByNomeContainingIgnoreCase("Abreu");
+		assertEquals(4, listaDeUsuarios.size());
+		
 		
 	}
 }
