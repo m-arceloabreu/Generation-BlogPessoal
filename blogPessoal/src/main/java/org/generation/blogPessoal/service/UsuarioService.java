@@ -24,35 +24,25 @@ public class UsuarioService {
 	
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 		if(repository.findByUsuario(usuario.getUsuario()).isPresent()) 
-			return Optional.empty();
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		
-		String senhaEncoder = encoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaEncoder);
-		
-		return Optional.ofNullable(repository.save(usuario));
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
+		usuario.setSenha(criptografarSenha(usuario.getSenha()));
+		return Optional.of(repository.save(usuario));
 	}
 	
-	public Optional<UsuarioLogin> Logar(Optional <UsuarioLogin> user){
-		
-			
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
-		
-		if(usuario.isPresent()) {
-			
-			if(encoder.matches(user.get().getSenha(), usuario.get().getSenha())) {
-				String auth = user.get().getUsuario() + ":" + user.get().getSenha();
-				byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-				String authHeader = "Basic " + new String(encodedAuth);
-				
-				user.get().setToken(authHeader);
-				user.get().setNome(usuario.get().getNome());
-				
-				return user;
+	public Optional<UsuarioLogin> logarUsuario(Optional<UsuarioLogin> usuarioLogin) {
+		Optional<Usuario> usuario = repository.findByUsuario(usuarioLogin.get().getUsuario());
+		if (usuario.isPresent()) {
+			if (compararSenhas(usuarioLogin.get().getSenha(), usuario.get().getSenha())) {
+				usuarioLogin.get().setId(usuario.get().getId());
+				usuarioLogin.get().setNome(usuario.get().getNome());
+				usuarioLogin.get().setFoto(usuario.get().getFoto());
+				usuarioLogin.get().setToken(generatorBasicToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha()));
+                                usuarioLogin.get().setSenha(usuario.get().getSenha());
+				return usuarioLogin;
 			}
 		}
-		return null;
+		throw new ResponseStatusException(
+				HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos!", null);
 	}
 	
 
@@ -73,11 +63,25 @@ public class UsuarioService {
 			
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!", null);		
 	}	
+	
+	
+	private boolean compararSenhas(String senhaDigitada, String senhaBanco) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.matches(senhaDigitada, senhaBanco);
+	}
+	
+	
 	private String criptografarSenha(String senha) {
 
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String senhaEncoder = encoder.encode(senha);
 
 		return senhaEncoder;
+	}
+	
+	private String generatorBasicToken(String email, String password) {
+		String structure = email + ":" + password;
+		byte[] structureBase64 = Base64.encodeBase64(structure.getBytes(Charset.forName("US-ASCII")));
+		return "Basic " + new String(structureBase64);
 	}
 }
