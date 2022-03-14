@@ -27,10 +27,9 @@ public class UsuarioRepositoryTest {
 	void start() {
 		
 		usuarioRepository.deleteAll();
-		usuarioRepository.save(new Usuario(0L,"Marcelo Abreu","marcelinho13","marcelo12345"));
-		usuarioRepository.save(new Usuario(0L,"Henrique Abreu","henrique123","henrique12345"));
-		usuarioRepository.save(new Usuario(0L,"Luciana Abreu","luciana123","luciana12345"));
-		usuarioRepository.save(new Usuario(0L,"Pedo Abreu","pedro123","pedro12345"));	
+		usuarioRepository.save(new Usuario(0L,"Henrique Abreu","fotook","henrique123@email.com","henrique12345"));
+		usuarioRepository.save(new Usuario(0L,"Luciana Abreu","fotook","luciana123@email.com","luciana12345"));
+		usuarioRepository.save(new Usuario(0L,"Pedo Abreu","fotook","pedro123@email.com","pedro12345"));	
 	}
 	@Test
 	@DisplayName("Retorna 1 usuario")
