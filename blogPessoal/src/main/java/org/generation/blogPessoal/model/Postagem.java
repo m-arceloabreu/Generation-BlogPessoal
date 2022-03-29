@@ -26,6 +26,7 @@ public class Postagem {
 	@NotNull
 	@Size(min = 5, max = 100)
 	private String titulo;
+	
 	@NotNull
 	@Size(min = 10, max = 500)
 	private String texto;
