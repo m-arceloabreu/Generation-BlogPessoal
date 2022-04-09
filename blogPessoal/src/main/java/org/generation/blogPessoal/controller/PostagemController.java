@@ -73,7 +73,7 @@ public class PostagemController {
 	public void delete(@PathVariable long id) {
 		Optional<Postagem> post = repository.findById(id);
 		 if(post.isEmpty())
-			 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+			 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Postagem não encontrada", null);
 		 repository.deleteById(id);
 	}
 	
